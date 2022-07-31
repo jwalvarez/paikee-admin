@@ -1,15 +1,17 @@
 <template>
-  <hello-world />
+  <div>
+    <BarChart></BarChart>
+  </div>
 </template>
 
 <script>
-import HelloWorld from "../components/HelloWorld";
+import BarChart from "../components/BarChart.vue";
 
 export default {
   name: "Home",
 
   components: {
-    HelloWorld,
+    BarChart,
   },
 };
 </script>
