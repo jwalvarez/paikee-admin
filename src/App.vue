@@ -5,7 +5,7 @@
       :mini-variant.sync="mini"
       permanent
       app
-      color="white"
+      class="navigation-drawer-left"
       width="320"
       floating
     >
@@ -61,9 +61,9 @@
       floating
       width="300"
       color="transparent"
-      style="padding: 0 6px"
+      style="padding: 0 16px 0px 8px"
     >
-      <div class="calendar-container">
+      <div class="calendar-container mt-4">
         <!-- <h3>Calendario</h3> -->
         <vc-date-picker is-expanded mode="date" v-model="date" />
       </div>
@@ -72,6 +72,59 @@
       <v-card class="mb-4 mt-2 rounded-lg transparent" elevation="0">
         <v-card-actions>
           <h4>Finalizadas</h4>
+
+          <v-spacer></v-spacer>
+
+          <v-btn icon @click="show = !show">
+            <v-icon>{{
+              show ? "mdi-eye-off-outline" : "mdi-eye-outline"
+            }}</v-icon>
+          </v-btn>
+        </v-card-actions>
+        <v-expand-transition>
+          <div v-show="true">
+            <v-divider></v-divider>
+
+            <v-card outlined class="mb-4 mt-2 rounded-lg transparent" color="">
+              <v-list-item three-line class="pa-0">
+                <v-row>
+                  <v-col cols="4">
+                    <!-- <div class="light-blue lighten-1 rounded-lg mb-16"></div> -->
+                    <v-list-item-content
+                      class="light-blue lighten-1 rounded-lg mb-16"
+                    >
+                      <v-icon color="white"> mdi-forum-outline </v-icon>
+                    </v-list-item-content>
+                  </v-col>
+                  <v-col cols="8">
+                    <v-list-item-content class="pr-6">
+                      <div class="text-overline mb-4 d-flex justify-end">
+                        8:00 am
+                      </div>
+
+                      <v-list-item-subtitle>
+                        <strong> Clase: </strong> Speaking
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle>
+                        <strong> Tutor: </strong> Tomas Ortiz
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle>
+                        <strong> Tipo: </strong> Individual
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle>
+                        <strong> # Alumnos: </strong> 24
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-col>
+                </v-row>
+              </v-list-item>
+            </v-card>
+          </div>
+        </v-expand-transition>
+      </v-card>
+      <v-card class="mb-4 mt-2 rounded-lg transparent" elevation="0">
+        <v-card-actions>
+          <h4>Reservadas</h4>
 
           <v-spacer></v-spacer>
 
@@ -122,51 +175,18 @@
           </div>
         </v-expand-transition>
       </v-card>
-      <div class="today-classes" overflow>
-        <h4>Reservadas</h4>
-        <v-card outlined class="mb-4 mt-2 rounded-lg transparent" color="">
-          <v-list-item three-line class="pa-0">
-            <v-row>
-              <v-col cols="4">
-                <!-- <div class="light-blue lighten-1 rounded-lg mb-16"></div> -->
-                <v-list-item-content
-                  class="light-blue lighten-1 rounded-lg mb-16"
-                >
-                  <v-icon color="white"> mdi-twitter </v-icon>
-                </v-list-item-content>
-              </v-col>
-              <v-col cols="8">
-                <v-list-item-content class="pr-6">
-                  <div class="text-overline mb-4 d-flex justify-end">
-                    8:00 am
-                  </div>
-
-                  <v-list-item-subtitle>
-                    <strong> Clase: </strong> Speaking
-                  </v-list-item-subtitle>
-                  <v-list-item-subtitle>
-                    <strong> Tutor: </strong> Tomas Ortiz
-                  </v-list-item-subtitle>
-                  <v-list-item-subtitle>
-                    <strong> Tipo: </strong> Individual
-                  </v-list-item-subtitle>
-                  <v-list-item-subtitle>
-                    <strong> # Alumnos: </strong> 24
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-col>
-            </v-row>
-          </v-list-item>
-        </v-card>
-      </div>
     </v-navigation-drawer>
-
-    <v-app-bar app clipped-right flat height="90" :color="appBarColor">
+    <!-- :color="appBarColor" -->
+    <v-app-bar app clipped-right flat height="90" class="appBarColor">
       <v-col>
         <v-row>
-          <v-toolbar-title><h1>Dashboard</h1></v-toolbar-title>
+          <v-toolbar-title>
+            <h1 class="text-h4 font-weight-black">
+              Dashboard
+            </h1></v-toolbar-title
+          >
         </v-row>
-        <v-row class="mt-0">
+        <v-row class="">
           <small>Admnistrador</small>
         </v-row>
       </v-col>
@@ -175,26 +195,33 @@
       <v-spacer></v-spacer>
 
       <v-text-field
+        class="mx-4 rounded-lg"
         hide-details
         prepend-inner-icon="mdi-magnify"
-        single-line
+        flat
         solo
+        single-line
         dense
       ></v-text-field>
 
-      <v-avatar>
+      <v-avatar size="40">
         <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
       </v-avatar>
-      <v-menu left bottom>
+      <v-menu left bottom transition="slide-x-reverse-transition">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
+            <v-icon>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
 
         <v-list>
-          <v-list-item v-for="n in 5" :key="n" @click="() => {}">
-            <v-list-item-title>Option {{ n }}</v-list-item-title>
+          <v-list-item
+            color="primary"
+            v-for="option in perfilMenu"
+            :key="option"
+            @click="() => {}"
+          >
+            <v-list-item-title>{{ option.name }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -202,7 +229,7 @@
     <!-- Sizes your content based upon application components -->
     <v-main>
       <!-- Provides the application the proper gutter -->
-      <v-container>
+      <v-container class="pt-4">
         <!-- If using vue-router -->
         <router-view></router-view>
       </v-container>
@@ -216,19 +243,45 @@ export default {
 
   data: () => ({
     show: false,
+    selectedItemPerfilMenu: -1,
     // appBarColor: "#E6EDF3",
-    appBarColor: "transparent",
     drawer: true,
+    perfilMenu: [
+      {
+        name: "Ver Perfil",
+        method: "verPerfil",
+      },
+      {
+        name: "Cerrar Sesión",
+        method: "cerrarSesion",
+      },
+      {
+        name: "Modo Oscuro",
+        method: "modoOscuro",
+      },
+    ],
     items: [
-      { title: "Inicio", icon: "mdi-home-city", url: "/" },
-      { title: "Usuarios", icon: "mdi-home-city", url: "/users" },
-      { title: "Clases", icon: "mdi-home-city", url: "/classes" },
-      { title: "Estadisticas", icon: "mdi-home-city", url: "/statistics" },
-      { title: "Promociones", icon: "mdi-home-city", url: "/promos" },
-      { title: "Notificaciones", icon: "mdi-home-city", url: "/notifications" },
+      { title: "Inicio", icon: "mdi-home-outline", url: "/" },
+      {
+        title: "Usuarios",
+        icon: "mdi-account-multiple-outline",
+        url: "/users",
+      },
+      { title: "Clases", icon: "mdi-school-outline", url: "/classes" },
+      {
+        title: "Estadisticas de Paikee",
+        icon: "mdi-chart-box-outline",
+        url: "/statistics",
+      },
+      { title: "Promociones", icon: "mdi-sale-outline", url: "/promos" },
+      {
+        title: "Notificaciones",
+        icon: "mdi-bell-outline",
+        url: "/notifications",
+      },
       {
         title: "Historial de Pagos",
-        icon: "mdi-home-city",
+        icon: "mdi-history",
         url: "/pay-history",
       },
     ],
@@ -240,6 +293,21 @@ export default {
 };
 </script>
 <style>
+.appBarColor {
+  background: #ffffff20 !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.v-text-field {
+  opacity: 0.6;
+}
+
+.navigation-drawer-left {
+  background-color: #e6edf300 !important;
+}
+
 .calendar-container {
   background: #e6edf3;
   padding: 10px;

@@ -51,7 +51,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 400,
+      default: 200,
     },
     cssClasses: {
       default: "",
@@ -82,17 +82,26 @@ export default {
           {
             label: "Grupales",
             backgroundColor: "#22598C",
-            data: [40, 20, 12, 13, 19, 20, 8],
+            data: [15, 10, 22, 13, 19, 30, 48],
           },
           {
             label: "Individuales",
             backgroundColor: "#31CAEC",
-            data: [10, 32, 18, 8, 39, 14, 13],
+            data: [10, 12, 18, 18, 29, 34, 33],
           },
         ],
       },
       chartOptions: {
         responsive: true,
+        plugins: {
+          legend: {
+            position: "top",
+          },
+          title: {
+            display: true,
+            text: "Clases dictadas ~ 2022",
+          },
+        },
         scales: {
           x: {
             stacked: true,
