@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer
+      v-if="isAuth"
       v-model="drawer"
       :mini-variant.sync="mini"
       permanent
@@ -55,6 +56,7 @@
     </v-navigation-drawer>
 
     <v-navigation-drawer
+      v-if="isAuth"
       app
       clipped
       right
@@ -177,7 +179,14 @@
       </v-card>
     </v-navigation-drawer>
     <!-- :color="appBarColor" -->
-    <v-app-bar app clipped-right flat height="90" class="appBarColor">
+    <v-app-bar
+      v-if="isAuth"
+      app
+      clipped-right
+      flat
+      height="90"
+      class="appBarColor"
+    >
       <v-col>
         <v-row>
           <v-toolbar-title>
@@ -217,8 +226,8 @@
         <v-list>
           <v-list-item
             color="primary"
-            v-for="option in perfilMenu"
-            :key="option"
+            v-for="(option, index) in perfilMenu"
+            :key="index"
             @click="() => {}"
           >
             <v-list-item-title>{{ option.name }}</v-list-item-title>
@@ -243,6 +252,7 @@ export default {
 
   data: () => ({
     show: false,
+    isAuth: false,
     selectedItemPerfilMenu: -1,
     // appBarColor: "#E6EDF3",
     drawer: true,
@@ -290,6 +300,9 @@ export default {
     date: new Date(),
     //
   }),
+  created() {
+    this.isAuth = this.$store.state.user.isAuthenticated;
+  },
 };
 </script>
 <style>

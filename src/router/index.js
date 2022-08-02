@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import StatisticsView from '../views/StatisticsView.vue'
 import UsersView from '../views/UsersView.vue'
+import LoginView from '../views/LoginView.vue'
+import store from '../store/index.js'
 
 Vue.use(VueRouter)
 
@@ -10,7 +12,13 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: { requiresLogin: true }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView
   },
   {
     path: '/statistics',
@@ -35,6 +43,15 @@ const routes = [
 const router = new VueRouter({
   mode: "history",
   routes: routes,
+})
+
+router.beforeEach((to, from, next) => {
+  if (!store.state.user.isAuthenticated && to.path != '/login') {
+      // You can use store variable here to access globalError or commit mutation 
+      next("/login")
+  } else {
+      next()
+  }
 })
 
 export default router
