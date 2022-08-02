@@ -50,6 +50,7 @@
             elevation="0"
             :disabled="!valid"
             type="submit"
+            :loading="loading"
           >
             Iniciar sesión
           </v-btn>
@@ -65,9 +66,12 @@
   </v-container>
 </template>
 <script>
+import axios from "axios";
+import store from "../store/index.js";
+
 export default {
   data: () => ({
-    checkbox: false,
+    loading: false,
     valid: false,
     username: "",
     pass: "",
@@ -81,8 +85,22 @@ export default {
   methods: {
     login() {
       if (this.valid) {
-        console.log("Valid");
-        console.log(this.username, this.pass);
+        this.loading = true;
+        axios
+          .post("/auth/login/", {
+            username: this.username,
+            password: this.pass,
+          })
+          .then((response) => {
+            console.log(response);
+            // TODO: Save token in localStorage and store
+            store.state.user.token = response.data.token;
+            this.loading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.loading = false;
+          });
       } else {
         console.log("Invalid");
       }
