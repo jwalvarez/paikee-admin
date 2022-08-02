@@ -1,13 +1,13 @@
 <template>
   <v-app>
     <v-navigation-drawer
-      v-if="isAuth"
+      v-if="isAuthenticated"
       v-model="drawer"
       :mini-variant.sync="mini"
       permanent
       app
       class="navigation-drawer-left"
-      width="320"
+      width="260"
       floating
     >
       <v-list-item class="px-2">
@@ -56,7 +56,7 @@
     </v-navigation-drawer>
 
     <v-navigation-drawer
-      v-if="isAuth"
+      v-if="isAuthenticated"
       app
       clipped
       right
@@ -180,7 +180,7 @@
     </v-navigation-drawer>
     <!-- :color="appBarColor" -->
     <v-app-bar
-      v-if="isAuth"
+      v-if="isAuthenticated"
       app
       clipped-right
       flat
@@ -216,19 +216,24 @@
       <v-avatar size="40">
         <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
       </v-avatar>
-      <v-menu left bottom transition="slide-x-reverse-transition">
+      <v-menu
+        open-on-hover
+        offset-y
+        left
+        dark
+        transition="slide-x-reverse-transition"
+      >
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
-
-        <v-list>
+        <v-list dense class="py-0">
           <v-list-item
             color="primary"
             v-for="(option, index) in perfilMenu"
             :key="index"
-            @click="() => {}"
+            @click="closeSession"
           >
             <v-list-item-title>{{ option.name }}</v-list-item-title>
           </v-list-item>
@@ -238,10 +243,10 @@
     <!-- Sizes your content based upon application components -->
     <v-main>
       <!-- Provides the application the proper gutter -->
-      <v-container class="pt-4">
+      <div class="pa-4">
         <!-- If using vue-router -->
         <router-view></router-view>
-      </v-container>
+      </div>
     </v-main>
   </v-app>
 </template>
@@ -258,16 +263,13 @@ export default {
     drawer: true,
     perfilMenu: [
       {
-        name: "Ver Perfil",
-        method: "verPerfil",
+        name: "Cerrar sesión",
       },
       {
-        name: "Cerrar Sesión",
-        method: "cerrarSesion",
+        name: "Cerrar sesión",
       },
       {
-        name: "Modo Oscuro",
-        method: "modoOscuro",
+        name: "Cerrar sesión",
       },
     ],
     items: [
@@ -301,7 +303,23 @@ export default {
     //
   }),
   created() {
-    this.isAuth = this.$store.state.user.isAuthenticated;
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      this.$store.state.user = user;
+      this.$router.push("/");
+    }
+  },
+  computed: {
+    isAuthenticated() {
+      return this.$store.state.user.isAuthenticated;
+    },
+  },
+  methods: {
+    closeSession() {
+      localStorage.removeItem("user");
+      this.$store.state.user = {};
+      this.$router.push("/login");
+    },
   },
 };
 </script>

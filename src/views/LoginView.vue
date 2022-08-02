@@ -93,9 +93,15 @@ export default {
           })
           .then((response) => {
             console.log(response);
-            // TODO: Save token in localStorage and store
-            store.state.user.token = response.data.token;
+            // TODO: Find the best way to do this
+            store.state.user = {
+              token: response.data.token,
+              isAuthenticated: true,
+              name: this.username,
+            };
+            localStorage.setItem("user", JSON.stringify(store.state.user));
             this.loading = false;
+            this.$router.push("/");
           })
           .catch((error) => {
             console.log(error);
@@ -118,9 +124,9 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .container {
-  height: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
