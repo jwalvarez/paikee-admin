@@ -190,32 +190,36 @@
       <v-col>
         <v-row>
           <v-toolbar-title>
-            <h1 class="text-h4 font-weight-black">
-              Dashboard
-            </h1></v-toolbar-title
-          >
+            <h1 class="text-h5 font-weight-bold" style="color: #323335">
+              Bienvenido, Jhon 🎉
+            </h1>
+          </v-toolbar-title>
         </v-row>
-        <v-row class="">
-          <small>Admnistrador</small>
+        <v-row class="text-subtitle" style="color: #3b3d3f">
+          <small>Administrador</small>
         </v-row>
       </v-col>
 
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
-
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
       <v-text-field
-        class="mx-4 rounded-lg"
+        class="mx-4 rounded-lg text-subtitle-2"
         hide-details
         prepend-inner-icon="mdi-magnify"
         flat
         solo
         single-line
         dense
-      ></v-text-field>
+        placeholder="Busca por nombre, tutor, clase, etc."
+      >
+      </v-text-field>
 
       <v-avatar size="40">
         <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
       </v-avatar>
+
       <v-menu
         open-on-hover
         offset-y
@@ -297,7 +301,7 @@ export default {
         url: "/pay-history",
       },
     ],
-    mini: false,
+    mini: true,
     selectedRoute: 0,
     date: new Date(),
     //

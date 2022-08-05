@@ -17,8 +17,12 @@
 
         <v-spacer></v-spacer>
       </div>
-
-      <v-dialog v-model="dialog" max-width="400px">
+      <v-dialog
+        transition="slide-y-transition"
+        v-model="dialog"
+        persistent
+        max-width="400px"
+      >
         <!-- <v-btn color="primary" @click="initialize"> Reset </v-btn> -->
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -33,57 +37,101 @@
           </v-btn>
         </template>
 
-        <v-card>
-          <v-card-title>
-            <span class="text-h5">{{ formTitle }}</span>
-          </v-card-title>
+        <v-card class="new-user-card">
+          <v-row class="ma-0 pa-0">
+            <v-col cols="12" class="text-center">
+              <v-card-title>
+                <span class="text-h6 font-weight-bold">{{ formTitle }}</span>
+              </v-card-title>
 
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.name"
-                    label="Dessert name"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.class"
-                    label="class"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.fat"
-                    label="Fat (g)"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.students"
-                    label="students (g)"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.protein"
-                    label="Protein (g)"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        class="rounded-lg text-subtitle-2"
+                        dense
+                        flat
+                        hide-details
+                        placeholder="Nombre Completo"
+                        single-line
+                        solo
+                        v-model="editedItem.name"
+                      >
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-select
+                        class="rounded-lg text-subtitle-2"
+                        hide-details
+                        dense
+                        :items="rolOptions"
+                        flat
+                        placeholder="Rol"
+                        single-line
+                        solo
+                        v-model="editedItem.rol"
+                      >
+                      </v-select>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        class="rounded-lg text-subtitle-2"
+                        hide-details
+                        dense
+                        flat
+                        placeholder="Clase"
+                        single-line
+                        solo
+                        v-model="editedItem.class"
+                      >
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        class="rounded-lg text-subtitle-2"
+                        hide-details
+                        dense
+                        flat
+                        placeholder="Alumnos"
+                        single-line
+                        solo
+                        v-model="editedItem.students"
+                      >
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        class="rounded-lg text-subtitle-2"
+                        hide-details
+                        dense
+                        flat
+                        placeholder="Progreso del Curso"
+                        single-line
+                        solo
+                        v-model="editedItem.proteins"
+                      >
+                      </v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="close"> Cancelar </v-btn>
-            <v-btn color="blue darken-1" text @click="save"> Guardar </v-btn>
-          </v-card-actions>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">
+                  Cancelar
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="save">
+                  Guardar
+                </v-btn>
+              </v-card-actions>
+            </v-col>
+          </v-row>
         </v-card>
       </v-dialog>
 
-      <v-dialog v-model="dialogDelete" max-width="500px">
+      <v-dialog v-model="dialogDelete" max-width="500px" persistent>
         <v-card>
           <v-card-title class="text-h7 d-flex justify-center">
             ¿Está Seguro que desea eliminar este usuario?
@@ -101,11 +149,11 @@
         </v-card>
       </v-dialog>
     </div>
-
     <v-data-table
       :headers="headers"
       :items="desserts"
       class="elevation-0 transparent"
+      :sort-by="headers[sortBy]?.value"
       :footer-props="{
         showFirstLastPage: true,
         'items-per-page-text': 'Usuarios por página',
@@ -113,9 +161,38 @@
         'page-text': '{0}-{1} de {2}',
       }"
     >
-      <!-- <template v-slot:[`footer.page-text`]="items">
-        {{ items.pageStart }} - {{ items.pageStop }} de {{ items.itemsLength }}
-      </template> -->
+      <template v-slot:header.actions="{ header }">
+        <div class="text-right">
+          <v-menu
+            transition="slide-x-transition"
+            open-on-click
+            offset-y
+            left
+            rounded="lg"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <span v-bind="attrs" v-on="on" class="pb-2">
+                {{ header.text }} {{ headers[sortBy]?.text || "Ninguna" }}
+                <v-icon color="grey" dark> mdi-chevron-down </v-icon>
+              </span>
+            </template>
+
+            <v-list flat dense left>
+              <v-list-item-group v-model="sortBy" color="primary">
+                <v-list-item
+                  v-for="(item, i) in headers"
+                  v-if="i != 4 && i != 3"
+                  :key="i"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.text"></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-menu>
+        </div>
+      </template>
 
       <template v-slot:item="{ item }">
         <tr class="data-table-row">
@@ -183,22 +260,29 @@ export default {
     switch1: true,
     dialog: false,
     dialogDelete: false,
+    sortBy: -1,
+    rolOptions: [
+      { text: "Alumno", value: "student" },
+      { text: "Profesor", value: "teacher" },
+      { text: "Administrador", value: "admin" },
+    ],
     headers: [
       {
         text: "Profesores",
         align: "start",
         value: "name",
+        sortable: false,
       },
-      { text: "Clase", value: "class" },
-      { text: "Alumnos", value: "students" },
+      { text: "Clase", value: "class", sortable: false },
+      { text: "Alumnos", value: "students", sortable: false },
       {
-        text: "Progreso del Curso",
+        text: "P. del Curso",
         value: "protein",
         width: "220px",
+        sortable: false,
       },
-
       {
-        text: "Editar/Eliminar",
+        text: "Ordenar por",
         value: "actions",
         sortable: false,
         align: "right",
@@ -208,9 +292,9 @@ export default {
     editedIndex: -1,
     editedItem: {
       name: "",
-      class: 0,
-      fat: 0,
-      students: 0,
+      class: "",
+      fat: "",
+      students: "",
       protein: 0,
     },
     defaultItem: {
@@ -507,5 +591,15 @@ export default {
   justify-content: end;
   display: flex;
   align-items: center;
+}
+
+.new-user-card {
+  background-color: rgb(229, 238, 241) !important;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>
