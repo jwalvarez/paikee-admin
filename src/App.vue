@@ -298,10 +298,10 @@ export default {
       {
         title: "Historial de Pagos",
         icon: "mdi-history",
-        url: "/pay-history",
+        url: "/payment-history",
       },
     ],
-    mini: true,
+    mini: false,
     selectedRoute: 0,
     date: new Date(),
     //
