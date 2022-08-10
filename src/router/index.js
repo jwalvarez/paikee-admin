@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import StatisticsView from "../views/StatisticsView.vue";
 import PaymentHistoryView from "../views/PaymentHistoryView.vue";
+import NotificationView from "../views/NotificationView.vue";
 import UsersView from "../views/UsersView.vue";
 import LoginView from "../views/LoginView.vue";
 import store from "../store/index.js";
@@ -15,6 +16,11 @@ const routes = [
     name: "home",
     component: HomeView,
     meta: { requiresLogin: true },
+  },
+  {
+    path: "/notifications",
+    name: "notifications",
+    component: NotificationView,
   },
   {
     path: "/login",
