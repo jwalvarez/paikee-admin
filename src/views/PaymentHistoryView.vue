@@ -410,10 +410,6 @@ export default {
   min-width: 0px !important;
 }
 
-.bordered {
-  border: 1px solid red;
-}
-
 .actions-col {
   justify-content: end;
   display: flex;
