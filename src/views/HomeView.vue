@@ -3,14 +3,36 @@
     <div class="v-container">
       <BarChart></BarChart>
     </div>
-    <v-container class="px-0">
+    <v-spacer class="mb-4"></v-spacer>
+    <v-container class="pa-0 ma-0">
       <v-row>
-        <v-col v-for="i in 4" :key="i">
-          <Stat />
+        <v-col cols="4">
+          <Stat
+            :amount="7819"
+            color="#7C4DFF"
+            subtitle="840 usuarios"
+            title="Total usuarios"
+          />
+        </v-col>
+        <v-col cols="4">
+          <Stat
+            :amount="6001"
+            color="#FF9E80"
+            subtitle="240 usuarios nuevos esta semana"
+            title="Profesores"
+          />
+        </v-col>
+        <v-col cols="full">
+          <Stat
+            :amount="1801"
+            color="#0091EA"
+            subtitle="600 usuarios nuevos esta semana"
+            title="Alumnos"
+          />
         </v-col>
       </v-row>
     </v-container>
-    <v-spacer class="mb-2"></v-spacer>
+    <v-spacer class="mb-4"></v-spacer>
     <h3>Notificaciones Pop-ups</h3>
     <h4>Hoy</h4>
     <div v-for="i in 3" :key="i">

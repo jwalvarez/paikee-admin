@@ -1,29 +1,27 @@
 <template>
-  <v-card color="#EAF0F5">
-    <v-card-title
-      class="py-0 font-weight-black"
-      v-text="items[0].title"
-    ></v-card-title>
-    <div class="d-flex pa-2">
-      <v-avatar class="my-auto rounded-0" size="50">
-        <v-icon color="black" large> mdi-account-multiple-outline </v-icon>
-      </v-avatar>
-      <div>
-        <v-card-subtitle
-          class="text-caption grey--text py-3"
-          v-text="items[0].subtitle"
-        ></v-card-subtitle>
-        <div class="d-flex justify-start my-auto px-4">
-          <h4 class="font-weight-black text-h4 cyan--text lighten-4">625</h4>
+  <v-card :color="color + '10'" class="stack-container py-4">
+    <v-card-title class="py-0 text-body-1 font-weight-bold">
+      <div class="d-flex">
+        <v-icon
+          class="pa-2 rounded-xl mr-4 mb-auto"
+          :style="'background-color: ' + color + '30'"
+          :color="color"
+          size="34"
+        >
+          mdi-account-multiple-outline
+        </v-icon>
+        <div class="my-auto">
+          <h4 class="font-weight-black text-h5 lighten-4">{{ amount }}</h4>
+          <p class="text-caption font-weight-bold">{{ title }}</p>
         </div>
-        <!-- <v-card-subtitle class="ma-2 d-flex justify-end">
-          <v-chip small color="#FFE2E5" label text-color="red">
-            <v-icon left> mdi-label </v-icon>
-            <strong> 1.97% </strong>
-          </v-chip>
-        </v-card-subtitle> -->
       </div>
-    </div>
+    </v-card-title>
+    <v-spacer class="mb-0"></v-spacer>
+
+    <v-card-subtitle
+      class="text-body-2 py-0"
+      v-text="subtitle"
+    ></v-card-subtitle>
   </v-card>
 </template>
 
@@ -31,27 +29,32 @@
 export default {
   name: "Stat",
   props: {
-    name: {
+    title: {
       type: String,
-      default: "Nombre",
+      default: "Título",
+    },
+    color: {
+      type: String,
+      default: "primary",
+    },
+    subtitle: {
+      type: String,
+      default: "Subtítulo",
+    },
+    amount: {
+      type: Number,
+      default: 0,
     },
   },
-  data: () => ({
-    items: [
-      {
-        color: "#1F7087",
-        src: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-        title: "Profesores",
-        subtitle: "Profesores nuevos",
-      },
-      {
-        color: "#952175",
-        src: "https://cdn.vuetifyjs.com/images/cards/halcyon.png",
-        title: "Halcyon Days",
-        subtitle: "Ellie Goulding",
-      },
-    ],
-  }),
+  data: () => ({}),
   components: {},
 };
 </script>
+<style scoped>
+.stack-container {
+  height: 100%;
+  border: 1px solid #eeeeee !important;
+  border-radius: 12px !important;
+  box-shadow: 0px 10px 20px rgba(31, 38, 135, 0.05) !important;
+}
+</style>

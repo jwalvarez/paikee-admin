@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import StatisticsView from "../views/StatisticsView.vue";
+import ChartsView from "../views/ChartsView.vue";
 import PaymentHistoryView from "../views/PaymentHistoryView.vue";
 import NotificationView from "../views/NotificationView.vue";
 import UsersView from "../views/UsersView.vue";
@@ -30,7 +30,7 @@ const routes = [
   {
     path: "/statistics",
     name: "statistics",
-    component: StatisticsView,
+    component: ChartsView,
   },
   {
     path: "/users",

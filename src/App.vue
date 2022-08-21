@@ -277,7 +277,7 @@ export default {
       },
     ],
     items: [
-      { title: "Inicio", icon: "mdi-home-outline", url: "/" },
+      { title: "Resumen", icon: "mdi-home-outline", url: "/" },
       {
         title: "Usuarios",
         icon: "mdi-account-multiple-outline",
