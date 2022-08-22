@@ -47,7 +47,7 @@
           >
           </v-text-field>
           <v-textarea
-            auto-grow="false"
+            :auto-grow="false"
             background-color="transparent"
             class="rounded-0 text-subtitle-2"
             flat
