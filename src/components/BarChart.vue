@@ -95,7 +95,6 @@ export default {
   },
   data() {
     return {
-      showBarChartType: true,
       chartData: {
         labels: [
           "Ene",

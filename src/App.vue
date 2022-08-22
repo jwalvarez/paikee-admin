@@ -178,6 +178,169 @@
         </v-expand-transition>
       </v-card>
     </v-navigation-drawer>
+
+    <v-navigation-drawer
+      v-model="drawer_settings"
+      app
+      temporary
+      right
+      overlay-color="black"
+      overlay-opacity="0.6"
+      width="300"
+      height="100vh"
+    >
+      <v-list dense>
+        <v-list-item>
+          <v-icon
+            class="blue lighten-3 pa-2 rounded-lg mr-4 my-4"
+            color="white"
+            size="20"
+          >
+            mdi-cog-outline
+          </v-icon>
+          <v-list-item-title class="text-body-1">
+            Configuración
+          </v-list-item-title>
+          <v-icon
+            color="black"
+            size="20"
+            @click="
+              () => {
+                drawer_settings = false;
+              }
+            "
+          >
+            mdi-close
+          </v-icon>
+        </v-list-item>
+
+        <v-divider></v-divider>
+      </v-list>
+
+      <v-list dense flat subheader two-line>
+        <v-subheader>Perfil y privacidad</v-subheader>
+
+        <v-list-item-group v-model="settings" multiple active-class="">
+          <v-list-item>
+            <template v-slot:default="{ active }">
+              <v-list-item-action>
+                <v-checkbox :input-value="active"></v-checkbox>
+              </v-list-item-action>
+
+              <v-list-item-content>
+                <v-list-item-title>Gráfica de linea</v-list-item-title>
+                <v-list-item-subtitle>
+                  Cambiar gráfica predeterminada a gráfica de linea
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+          </v-list-item>
+
+          <v-list-item>
+            <template v-slot:default="{ active }">
+              <v-list-item-action>
+                <v-checkbox :input-value="active"></v-checkbox>
+              </v-list-item-action>
+
+              <v-list-item-content>
+                <v-list-item-title>Panel derecho</v-list-item-title>
+                <v-list-item-subtitle>
+                  Ocultar panel derecho (calendario y clases)
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+          </v-list-item>
+
+          <v-list-item>
+            <template v-slot:default="{ active }">
+              <v-list-item-action>
+                <v-checkbox :input-value="active"></v-checkbox>
+              </v-list-item-action>
+
+              <v-list-item-content>
+                <v-list-item-title>
+                  Acciones en tabla de usuario y clases
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  Mostrar acciones en la tabla de usuario y tabla de clases
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+
+      <v-list dense flat subheader two-line>
+        <v-subheader>Gráficas y métricas</v-subheader>
+
+        <v-list-item-group v-model="settings" multiple active-class="">
+          <v-list-item>
+            <template v-slot:default="{ active }">
+              <v-list-item-action>
+                <v-checkbox :input-value="active"></v-checkbox>
+              </v-list-item-action>
+
+              <v-list-item-content>
+                <v-list-item-title>Gráfica de linea</v-list-item-title>
+                <v-list-item-subtitle>
+                  Cambiar gráfica predeterminada a gráfica de linea
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+          </v-list-item>
+
+          <v-list-item>
+            <template v-slot:default="{ active }">
+              <v-list-item-action>
+                <v-checkbox :input-value="active"></v-checkbox>
+              </v-list-item-action>
+
+              <v-list-item-content>
+                <v-list-item-title>Panel derecho</v-list-item-title>
+                <v-list-item-subtitle>
+                  Ocultar panel derecho (calendario y clases)
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+          </v-list-item>
+
+          <v-list-item>
+            <template v-slot:default="{ active }">
+              <v-list-item-action>
+                <v-checkbox :input-value="active"></v-checkbox>
+              </v-list-item-action>
+
+              <v-list-item-content>
+                <v-list-item-title>
+                  Acciones en tabla de usuario y clases
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  Mostrar acciones en la tabla de usuario y tabla de clases
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+
+      <template v-slot:append>
+        <v-list class="pa-2">
+          <v-list-item-group>
+            <v-list-item @click="closeSession">
+              <v-icon
+                class="red lighten-2 pa-2 rounded-lg mr-4 my-4"
+                color="white"
+                size="20"
+              >
+                mdi-connection
+              </v-icon>
+              <v-list-item-title>Cerrar sesión</v-list-item-title>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </template>
+    </v-navigation-drawer>
+
     <!-- :color="appBarColor" -->
     <v-app-bar
       v-if="isAuthenticated"
@@ -191,7 +354,7 @@
         <v-row>
           <v-toolbar-title>
             <h1 class="text-h5 font-weight-bold" style="color: #323335">
-              Bienvenido, Jhon 🎉
+              Bienvenido, Jhon 🎉 {{ settings }}
             </h1>
           </v-toolbar-title>
         </v-row>
@@ -220,28 +383,12 @@
         <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
       </v-avatar>
 
-      <v-menu
-        open-on-hover
-        offset-y
-        left
-        dark
-        transition="slide-x-reverse-transition"
-      >
+      <v-menu offset-y left dark transition="slide-x-reverse-transition">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-chevron-down</v-icon>
+          <v-btn icon @click="openDrawerSetting">
+            <v-icon>mdi-cog-outline</v-icon>
           </v-btn>
         </template>
-        <v-list dense class="py-0">
-          <v-list-item
-            color="primary"
-            v-for="(option, index) in perfilMenu"
-            :key="index"
-            @click="closeSession"
-          >
-            <v-list-item-title>{{ option.name }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
       </v-menu>
     </v-app-bar>
     <!-- Sizes your content based upon application components -->
@@ -265,17 +412,7 @@ export default {
     selectedItemPerfilMenu: -1,
     // appBarColor: "#E6EDF3",
     drawer: true,
-    perfilMenu: [
-      {
-        name: "Cerrar sesión",
-      },
-      {
-        name: "Cerrar sesión",
-      },
-      {
-        name: "Cerrar sesión",
-      },
-    ],
+    drawer_settings: false,
     items: [
       { title: "Resumen", icon: "mdi-home-outline", url: "/" },
       {
@@ -305,6 +442,7 @@ export default {
     selectedRoute: 0,
     date: new Date(),
     //
+    settings: [],
   }),
   created() {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -323,6 +461,9 @@ export default {
       localStorage.removeItem("user");
       this.$store.state.user = {};
       this.$router.push("/login");
+    },
+    openDrawerSetting() {
+      this.drawer_settings = true;
     },
   },
 };
