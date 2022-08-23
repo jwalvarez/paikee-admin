@@ -22,8 +22,8 @@
           </v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click=""> Cancelar </v-btn>
-            <v-btn color="blue darken-1" text @click=""> OK </v-btn>
+            <v-btn color="blue darken-1" text> Cancelar </v-btn>
+            <v-btn color="blue darken-1" text> OK </v-btn>
             <v-spacer></v-spacer>
           </v-card-actions>
         </v-card>
@@ -159,7 +159,7 @@
         <span><strong>HOY</strong></span>
       </v-timeline-item>
 
-      <v-timeline-item v-for="i in 5" class="mb-4" color="grey" small>
+      <v-timeline-item v-for="i in 5" :key="i" class="mb-4" color="grey" small>
         <v-row justify="space-between">
           <v-col cols="12">
             <v-alert class="rounded-lg" color="#A1C4D924">

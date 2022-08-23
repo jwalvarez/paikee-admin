@@ -60,7 +60,7 @@
       :items="invoices"
       class="elevation-0 transparent"
       :sort-by="headers[sortBy]?.value"
-      items-per-page="5"
+      :items-per-page="5"
       :footer-props="{
         showFirstLastPage: true,
         'items-per-page-text': 'Movimientos por página',
@@ -68,39 +68,6 @@
         'page-text': '{0}-{1} de {2}',
       }"
     >
-      <template v-slot:header.actions="{ header }">
-        <div class="text-right">
-          <v-menu
-            transition="slide-x-transition"
-            open-on-click
-            offset-y
-            left
-            rounded="lg"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <span v-bind="attrs" v-on="on" class="pb-2">
-                {{ header.text }} {{ headers[sortBy]?.text || "Ninguna" }}
-                <v-icon color="grey" dark> mdi-chevron-down </v-icon>
-              </span>
-            </template>
-
-            <v-list flat dense left>
-              <v-list-item-group v-model="sortBy" color="primary">
-                <v-list-item
-                  v-for="(item, i) in headers"
-                  v-if="i != 4 && i != 3"
-                  :key="i"
-                >
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.text"></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </v-menu>
-        </div>
-      </template>
-
       <template v-slot:item="{ item }">
         <tr class="data-table-row">
           <td>

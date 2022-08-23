@@ -12,7 +12,9 @@
           class="my-auto ml-4"
           v-model="switch1"
           inset
-          :label="switch1 ? 'Mostrar Estudiantes' : 'Mostrar Profesores'"
+          :label="
+            switch1 ? 'Mostrar Clases Individuales' : 'Mostrar Clases Grupales'
+          "
         ></v-switch>
 
         <v-spacer></v-spacer>
@@ -33,7 +35,7 @@
             v-bind="attrs"
             v-on="on"
           >
-            Crear Usuario
+            Crear Clase
           </v-btn>
         </template>
 
@@ -202,16 +204,9 @@
             </v-chip>
           </td>
           <td>
-            <v-progress-linear
-              v-model="item.protein"
-              color="blue-grey"
-              height="24"
-              class="rounded-lg"
-            >
-              <template>
-                <strong>{{ Math.ceil(item.protein) }}%</strong>
-              </template>
-            </v-progress-linear>
+            <strong>
+              {{ getDate }}
+            </strong>
           </td>
           <td class="actions-col">
             <v-btn
@@ -250,6 +245,8 @@
   </div>
 </template>
 <script>
+import moment from "moment";
+
 export default {
   name: "UsersView",
   data: () => ({
@@ -272,7 +269,7 @@ export default {
       { text: "Clase", value: "class", sortable: false },
       { text: "Alumnos", value: "students", sortable: false },
       {
-        text: "P. del Curso",
+        text: "Fecha de Creación",
         value: "protein",
         width: "220px",
         sortable: false,
@@ -305,6 +302,11 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Crear nuevo usuario" : "Editar usuario";
+    },
+    getDate() {
+      moment.locale("es");
+      const date = new Date();
+      return moment(this.date).format("MMMM D, YYYY");
     },
     filteredHeader() {
       return this.headers.filter((item, index) => {

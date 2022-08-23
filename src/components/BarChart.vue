@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Bar
-      v-if="showBarChartType"
+    <LineChartGenerator
+      v-if="lineGraphic"
       :chart-options="chartOptions"
       :chart-data="chartData"
       :chart-id="chartId"
@@ -12,7 +12,7 @@
       :width="width"
       :height="height"
     />
-    <LineChartGenerator
+    <Bar
       v-else
       :chart-options="chartOptions"
       :chart-data="chartData"
@@ -58,11 +58,6 @@ export default {
   name: "BarChart",
   components: { Bar, LineChartGenerator },
   props: {
-    // TODO: Change this value through state props
-    showBarChartType: {
-      type: Boolean,
-      default: true,
-    },
     chartId: {
       type: String,
       // default: "bar-chart",
@@ -144,6 +139,11 @@ export default {
         },
       },
     };
+  },
+  computed: {
+    lineGraphic() {
+      return this.$store.state.settings.lineGraphic;
+    },
   },
 };
 </script>

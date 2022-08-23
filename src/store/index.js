@@ -11,6 +11,10 @@ export default new Vuex.Store({
       name: '',
       email: '',
     },
+    settings: {
+      lineGraphic: false,
+      leftPanel: true,
+    }
   },
   getters: {
   },

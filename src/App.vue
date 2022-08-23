@@ -3,7 +3,7 @@
     <v-navigation-drawer
       v-if="isAuthenticated"
       v-model="drawer"
-      :mini-variant.sync="mini"
+      :mini-variant.sync="leftPanel"
       permanent
       app
       class="navigation-drawer-left"
@@ -28,7 +28,7 @@
           />
         </v-list-item-title>
 
-        <v-btn icon @click.stop="mini = !mini">
+        <v-btn icon @click.stop="toggleLeftPanel">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
       </v-list-item>
@@ -43,13 +43,23 @@
             :to="item.url"
             link
           >
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
+            <v-tooltip
+              :disabled="!leftPanel"
+              right
+              open-delay="600"
+              transition="scroll-x-transition"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-list-item-icon v-bind="attrs" v-on="on">
+                  <v-icon>{{ item.icon }}</v-icon>
+                </v-list-item-icon>
 
-            <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item-content>
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <span>{{ item.title }}</span>
+            </v-tooltip>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -220,64 +230,17 @@
       <v-list dense flat subheader two-line>
         <v-subheader>Perfil y privacidad</v-subheader>
 
-        <v-list-item-group v-model="settings" multiple active-class="">
-          <v-list-item>
-            <template v-slot:default="{ active }">
-              <v-list-item-action>
-                <v-checkbox :input-value="active"></v-checkbox>
-              </v-list-item-action>
-
-              <v-list-item-content>
-                <v-list-item-title>Gráfica de linea</v-list-item-title>
-                <v-list-item-subtitle>
-                  Cambiar gráfica predeterminada a gráfica de linea
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <template v-slot:default="{ active }">
-              <v-list-item-action>
-                <v-checkbox :input-value="active"></v-checkbox>
-              </v-list-item-action>
-
-              <v-list-item-content>
-                <v-list-item-title>Panel derecho</v-list-item-title>
-                <v-list-item-subtitle>
-                  Ocultar panel derecho (calendario y clases)
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <template v-slot:default="{ active }">
-              <v-list-item-action>
-                <v-checkbox :input-value="active"></v-checkbox>
-              </v-list-item-action>
-
-              <v-list-item-content>
-                <v-list-item-title>
-                  Acciones en tabla de usuario y clases
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  Mostrar acciones en la tabla de usuario y tabla de clases
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </template>
-          </v-list-item>
-        </v-list-item-group>
+        TODO: Opciones de perfil aqui
       </v-list>
 
       <v-list dense flat subheader two-line>
         <v-subheader>Gráficas y métricas</v-subheader>
 
-        <v-list-item-group v-model="settings" multiple active-class="">
-          <v-list-item>
-            <template v-slot:default="{ active }">
+        <v-list-item-group multiple active-class="">
+          <v-list-item @click="changeGraphType">
+            <template>
               <v-list-item-action>
-                <v-checkbox :input-value="active"></v-checkbox>
+                <v-checkbox :input-value="lineGraphic"></v-checkbox>
               </v-list-item-action>
 
               <v-list-item-content>
@@ -289,33 +252,16 @@
             </template>
           </v-list-item>
 
-          <v-list-item>
-            <template v-slot:default="{ active }">
+          <v-list-item @click="toggleLeftPanel">
+            <template>
               <v-list-item-action>
-                <v-checkbox :input-value="active"></v-checkbox>
+                <v-checkbox :input-value="leftPanel"></v-checkbox>
               </v-list-item-action>
 
               <v-list-item-content>
-                <v-list-item-title>Panel derecho</v-list-item-title>
+                <v-list-item-title>Ocultar menu principal</v-list-item-title>
                 <v-list-item-subtitle>
-                  Ocultar panel derecho (calendario y clases)
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <template v-slot:default="{ active }">
-              <v-list-item-action>
-                <v-checkbox :input-value="active"></v-checkbox>
-              </v-list-item-action>
-
-              <v-list-item-content>
-                <v-list-item-title>
-                  Acciones en tabla de usuario y clases
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  Mostrar acciones en la tabla de usuario y tabla de clases
+                  Ocultar panel izquierdo (menu principal)
                 </v-list-item-subtitle>
               </v-list-item-content>
             </template>
@@ -354,7 +300,7 @@
         <v-row>
           <v-toolbar-title>
             <h1 class="text-h5 font-weight-bold" style="color: #323335">
-              Bienvenido, Jhon 🎉 {{ settings }}
+              Bienvenido, Jhon 🎉 {{ leftPanel }}
             </h1>
           </v-toolbar-title>
         </v-row>
@@ -383,13 +329,9 @@
         <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
       </v-avatar>
 
-      <v-menu offset-y left dark transition="slide-x-reverse-transition">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon @click="openDrawerSetting">
-            <v-icon>mdi-cog-outline</v-icon>
-          </v-btn>
-        </template>
-      </v-menu>
+      <v-btn icon @click="openDrawerSetting">
+        <v-icon>mdi-cog-outline</v-icon>
+      </v-btn>
     </v-app-bar>
     <!-- Sizes your content based upon application components -->
     <v-main>
@@ -442,7 +384,6 @@ export default {
     selectedRoute: 0,
     date: new Date(),
     //
-    settings: [],
   }),
   created() {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -455,6 +396,12 @@ export default {
     isAuthenticated() {
       return this.$store.state.user.isAuthenticated;
     },
+    lineGraphic() {
+      return this.$store.state.settings.lineGraphic;
+    },
+    leftPanel() {
+      return !this.$store.state.settings.leftPanel;
+    },
   },
   methods: {
     closeSession() {
@@ -464,6 +411,14 @@ export default {
     },
     openDrawerSetting() {
       this.drawer_settings = true;
+    },
+    changeGraphType() {
+      this.$store.state.settings.lineGraphic =
+        !this.$store.state.settings.lineGraphic;
+    },
+    toggleLeftPanel() {
+      this.$store.state.settings.leftPanel =
+        !this.$store.state.settings.leftPanel;
     },
   },
 };

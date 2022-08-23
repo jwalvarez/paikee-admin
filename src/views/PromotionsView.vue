@@ -1,154 +1,11 @@
 <template>
   <div class="users">
-    <!-- <div class="d-flex justify-start mb-6">
+    <div class="d-flex justify-start mb-6">
       <v-btn disabled class="text-capitalize">Usuarios</v-btn>
       <div class="mx-2"></div>
       <v-btn color="primary" class="text-capitalize">Profesores</v-btn>
-    </div> -->
-
-    <div class="d-flex justify-space-between">
-      <div class="d-flex justify-start my-auto">
-        <v-switch
-          class="my-auto ml-4"
-          v-model="switch1"
-          inset
-          :label="switch1 ? 'Mostrar Estudiantes' : 'Mostrar Profesores'"
-        ></v-switch>
-
-        <v-spacer></v-spacer>
-      </div>
-      <v-dialog
-        transition="slide-y-transition"
-        v-model="dialog"
-        persistent
-        max-width="400px"
-      >
-        <!-- <v-btn color="primary" @click="initialize"> Reset </v-btn> -->
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            color="primary"
-            class="text-capitalize mr-5"
-            elevation="0"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            Crear Usuario
-          </v-btn>
-        </template>
-
-        <v-card class="new-user-card">
-          <v-row class="ma-0 pa-0">
-            <v-col cols="12" class="text-center">
-              <v-card-title>
-                <span class="text-h6 font-weight-bold">{{ formTitle }}</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        class="rounded-lg text-subtitle-2"
-                        dense
-                        flat
-                        hide-details
-                        placeholder="Nombre Completo"
-                        single-line
-                        solo
-                        v-model="editedItem.name"
-                      >
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-select
-                        class="rounded-lg text-subtitle-2"
-                        hide-details
-                        dense
-                        :items="rolOptions"
-                        flat
-                        placeholder="Rol"
-                        single-line
-                        solo
-                        v-model="editedItem.rol"
-                      >
-                      </v-select>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-text-field
-                        class="rounded-lg text-subtitle-2"
-                        hide-details
-                        dense
-                        flat
-                        placeholder="Clase"
-                        single-line
-                        solo
-                        v-model="editedItem.class"
-                      >
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        class="rounded-lg text-subtitle-2"
-                        hide-details
-                        dense
-                        flat
-                        placeholder="Alumnos"
-                        single-line
-                        solo
-                        v-model="editedItem.students"
-                      >
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        class="rounded-lg text-subtitle-2"
-                        hide-details
-                        dense
-                        flat
-                        placeholder="Progreso del Curso"
-                        single-line
-                        solo
-                        v-model="editedItem.proteins"
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Cancelar
-                </v-btn>
-                <v-btn color="blue darken-1" text @click="save">
-                  Guardar
-                </v-btn>
-              </v-card-actions>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-dialog>
-
-      <v-dialog v-model="dialogDelete" max-width="500px" persistent>
-        <v-card>
-          <v-card-title class="text-h7 d-flex justify-center">
-            ¿Está Seguro que desea eliminar este usuario?
-          </v-card-title>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="closeDelete">
-              Cancelar
-            </v-btn>
-            <v-btn color="blue darken-1" text @click="deleteItemConfirm">
-              OK
-            </v-btn>
-            <v-spacer></v-spacer>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </div>
+
     <v-data-table
       :headers="headers"
       :items="desserts"
@@ -193,27 +50,17 @@
       <template v-slot:item="{ item }">
         <tr class="data-table-row">
           <td>{{ item.name }}</td>
-          <td>{{ item.class }}</td>
           <td>
-            <v-chip :color="getChipColor(item.students)">
-              <strong>
-                {{ item.students }}
-              </strong>
-            </v-chip>
+            <v-checkbox dense hide-details v-model="singleSelect"></v-checkbox>
           </td>
           <td>
-            <v-progress-linear
-              v-model="item.protein"
-              color="blue-grey"
-              height="24"
-              class="rounded-lg"
-            >
-              <template>
-                <strong>{{ Math.ceil(item.protein) }}%</strong>
-              </template>
-            </v-progress-linear>
+            <v-checkbox dense hide-details v-model="singleSelect"></v-checkbox>
           </td>
-          <td class="actions-col">
+          <td>
+            <v-checkbox dense hide-details v-model="singleSelect"></v-checkbox>
+          </td>
+
+          <!-- <td class="actions-col">
             <v-btn
               @click="deleteItem(item)"
               class="mx-2 square delete-btn"
@@ -232,7 +79,7 @@
             >
               <v-icon dark color="black"> mdi-pencil </v-icon>
             </v-btn>
-          </td>
+          </td> -->
         </tr>
       </template>
 
@@ -250,6 +97,8 @@
   </div>
 </template>
 <script>
+import moment from "moment";
+
 export default {
   name: "UsersView",
   data: () => ({
@@ -264,25 +113,25 @@ export default {
     ],
     headers: [
       {
-        text: "Profesores",
+        text: "Usuarios",
         align: "start",
         value: "name",
         sortable: false,
       },
-      { text: "Clase", value: "class", sortable: false },
-      { text: "Alumnos", value: "students", sortable: false },
+      { text: "Cupones", value: "class", sortable: false },
+      { text: "Descuentos", value: "students", sortable: false },
       {
-        text: "P. del Curso",
+        text: "Clases Gratis",
         value: "protein",
         width: "220px",
         sortable: false,
       },
-      {
-        text: "Ordenar por",
-        value: "actions",
-        sortable: false,
-        align: "right",
-      },
+      // {
+      //   text: "Ordenar por",
+      //   value: "actions",
+      //   sortable: false,
+      //   align: "right",
+      // },
     ],
     desserts: [],
     editedIndex: -1,
@@ -305,6 +154,11 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Crear nuevo usuario" : "Editar usuario";
+    },
+    getDate() {
+      moment.locale("es");
+      const date = new Date();
+      return moment(this.date).format("MMMM D, YYYY");
     },
     filteredHeader() {
       return this.headers.filter((item, index) => {
@@ -547,7 +401,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .data-table-row:hover {
   background-color: rgba(255, 255, 255, 0.59) !important;
 }
